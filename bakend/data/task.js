@@ -2,10 +2,9 @@ let tasks=[];
 module.exports ={
     getAll: () => tasks,
     getById:(id)=>tasks.find((t) => t.id==id),
-    add: (task) => {
+    add:(task) => {
         tasks.push(task);
-        return task;
-    },
+        return task;},
     update: (id, updates)=>{
         const index= tasks.findIndex((t) => t.id==id);
         if(index==-1){

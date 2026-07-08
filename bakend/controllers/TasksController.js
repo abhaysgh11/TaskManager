@@ -1,7 +1,6 @@
 const { v4: uuidv4 } = require("uuid");
-const store = require("../data/tasks");
+const store = require("../data/task.js");
 
-// GET /tasks
 function getAllTasks(req, res) {
     res.status(200).json(store.getAll());
 }
@@ -47,7 +46,7 @@ function updateTask(req, res) {
 function deleteTask(req, res) {
     const existing = store.getById(req.params.id);
     if (!existing){
-    return res.status(404).json({ error: "Task not found." });}
+    return res.status(404).json({ error: "Task not fond" });}
     store.remove(req.params.id);
     res.status(204).send();
 }

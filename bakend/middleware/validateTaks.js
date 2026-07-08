@@ -13,7 +13,7 @@ if (isCreate){
         
 } 
 else{
-    if (title !== undefined) {
+    if (title !== undefined){
     if (typeof title !== "string" || title.trim() === "") {
         return res.status(400).json({error: "Title is rewuired"});
     }

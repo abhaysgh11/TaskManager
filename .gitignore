@@ -4,3 +4,22 @@ dist/
 build/
 coverage/
 .DS_Store
+# Node
+**/node_modules
+**/.env
+**/dist
+**/build
+**/coverage
+
+# Flutter
+**/.dart_tool
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/build
+**/ios/Pods
+**/ios/.symlinks
+**/android/.gradle
+
+# macOS
+.DS_Store
