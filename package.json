@@ -14,6 +14,7 @@
     "escalade": "^3.2.0",
     "get-caller-file": "^2.0.5",
     "get-east-asian-width": "^1.6.0",
+    "react-icons": "^5.7.0",
     "rxjs": "^7.8.2",
     "shell-quote": "^1.8.4",
     "string-width": "^7.2.0",
@@ -26,11 +27,9 @@
     "yargs": "^18.0.0",
     "yargs-parser": "^22.0.0"
   },
-  
   "scripts": {
     "dev": "concurrently \"cd backend && npm start\" \"cd frontend && npm run dev\""
   },
-
   "keywords": [],
   "author": "",
   "license": "ISC",

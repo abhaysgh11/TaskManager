@@ -4,6 +4,12 @@ import Login from "./pages/Login";
 import Signup from "./pages/Sign";
 import Home from "./pages/Home";
 import PrivateRoute from "./routes/PriRoutes";
+import withAuth from "./hoc/withAuth";
+
+
+
+const UserHome = withAuth(Home, "user");
+const AdminHome = withAuth(Admin, "admin");
 
 function App() {
     return (
@@ -11,11 +17,8 @@ function App() {
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-                <Route path="/home" element={
-                <PrivateRoute allowedRole="user"><Home /></PrivateRoute> 
-                } />
-                <Route path = "/admin" element={
-                    <PrivateRoute allowedRole="admin"><Admin /></PrivateRoute>}
+                <Route path="/home" element={<UserHome/>} />
+                <Route path = "/admin" element={<AdminHome/>}
                 />
             </Routes>
         </BrowserRouter>
