@@ -1,60 +1,126 @@
-const { v4: uuidv4 } = require("uuid");
-const store = require("../data/task.js");
 
-function getAllTasks(req, res) {
-    res.status(200).json(store.getAll());
-}
+const Task = require("../models/Tasks");
 
-function getTaskById(req, res) {
-    const task = store.getById(req.params.id);
-    if (!task) {
-    return res.status(404).json({ error: "Task not found." });
+exports.getAllTasks = async (req, res) => {
+
+    try {
+
+        const tasks = await Task.find({
+            user: req.user.id
+        });
+
+        res.status(200).json(tasks);
+
     }
-    res.status(200).json(task);
-}
+    catch (err) {
 
-function createTask(req, res) {
-  const now = new Date().toISOString();
-  const newTask = {
-    id: uuidv4(),
-    title: req.body.title.trim(),
-    completed: false,
-    createdAt: now,
-    updatedAt: now,
-  };
-  store.add(newTask);
-  res.status(201).json(newTask);
-}
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+    }
+};
 
+exports.getTaskById = async (req, res) => {
+    try {
+        const task = await Task.findOne({
+            _id: req.params.id,
+            user: req.user.id
+        });
+        if (!task) {
+            return res.status(404).json({
+                success: false,
+                message: "Task not found"
+            });
+        }
+        res.status(200).json(task);
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+    }
+};
+exports.createTask = async(req,res)=> {
+    try {
+        const { title }=req.body;
+        const task = await Task.create({
+        title,
+        user: req.user.id,
+        fileName: req.file ? req.file.originalname : "",
+        filePath: req.file ? req.file.path : ""
 
+        });
+        res.status(201).json(task);
+    }
 
-function updateTask(req, res) {
-  const existing = store.getById(req.params.id);
-  if (!existing) {
-    return res.status(404).json({ error: "Task not found." });
-  }
+    catch (err) {
 
-  const updates = {};
-  if (req.body.title !== undefined) updates.title = req.body.title.trim();
-  if (req.body.completed !== undefined) updates.completed = Boolean(req.body.completed);
+        res.status(500).json({
 
-  const updated = store.update(req.params.id, updates);
-  res.status(200).json(updated);
-}
+            success: false,
 
+            message: err.message
 
-function deleteTask(req, res) {
-    const existing = store.getById(req.params.id);
-    if (!existing){
-    return res.status(404).json({ error: "Task not fond" });}
-    store.remove(req.params.id);
-    res.status(204).send();
-}
+        });
 
-module.exports = {
-    getAllTasks,
-    getTaskById,
-    createTask,
-    updateTask,
-    deleteTask,
+    }
+};
+
+exports.updateTask = async (req, res) => {
+
+    try {
+        const task = await Task.findOneAndUpdate(
+            {
+                _id: req.params.id,
+                user: req.user.id
+            },
+            req.body,
+            {
+                new: true
+            }
+        );
+
+        if (!task) {
+            return res.status(404).json({
+                success: false,
+                message: "Task not found"
+            });
+        }
+        res.json(task);
+    }
+    catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+    }
+};
+
+exports.deleteTask = async (req, res) => {
+    try {
+        const task = await Task.findOneAndDelete({
+            _id: req.params.id,
+            user: req.user.id
+        });
+        if (!task) {
+            return res.status(404).json({
+                success: false,
+                message: "Task not found"
+            });
+        }
+        res.json({
+            success: true,
+            message: "Task Deleted"
+        });
+
+    }
+
+    catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+    }
+
 };

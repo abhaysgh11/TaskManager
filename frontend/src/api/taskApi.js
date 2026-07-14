@@ -1,39 +1,25 @@
+import api from "../services/api";
 
-const URL = "http://localhost:5001/tasks";
+export const fetchTasks = async () => {
+const response = await api.get("/tasks");
+return response.data;
+};
 
-export async function fetchTasks() {
-const res = await fetch(URL);
-if (!res.ok) throw new Error("Failed to fetch tasks");
-return res.json();
-}
+export const createTask = async (formData) => {
+    const response = await api.post("/tasks", formData, {
+        headers: {
+        "Content-Type": "multipart/form-data",
+        },
+    });
 
-export async function createTask(t) {
-const res = await fetch(URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title: t }),
-});
-if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.error || "Failed to create task");
-}
-return res.json();
-}
+    return response.data;
+    };
 
-export async function updateTask(id, updates) {
-const res = await fetch(`${URL}/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(updates),
-});
-if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.error || "Failed to update");
-}
-return res.json();
-}
+export const updateTask = async (id, updates) => {
+const response = await api.put(`/tasks/${id}`, updates);
+return response.data;
+};
 
-export async function deleteTask(id) {
-const res = await fetch(`${URL}/${id}`, { method: "DELETE" });
-if (!res.ok) throw new Error("Failed to delete task");
-}
+export const deleteTask = async (id) => {
+await api.delete(`/tasks/${id}`);
+};

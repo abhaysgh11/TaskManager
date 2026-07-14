@@ -11,7 +11,7 @@ const handleSave = () => {
     return;
     }
     
-    onEdit(task.id, editTitle.trim());
+    onEdit(task._id, editTitle.trim());
     setIsEditing(false);
     setError("");
 };
@@ -40,18 +40,47 @@ if (isEditing) {
     );
 }
 
-return (
+
+    return (
     <li className={`task-item ${task.completed ? "completed" : ""}`}>
+    <div className="task-content">
+
     <span onClick={() => onToggle(task)} className="task-title">
         {task.title}
     </span>
-    <div className="task-actions">
-        <button onClick={() => onToggle(task)}>
-        {task.completed ? "Undo" : "Mark"}
-        </button>
-        <button onClick={() => setIsEditing(true)}>Edit</button>
-        <button onClick={() => onDelete(task.id)}>Delete</button>
+
+    
+    {task.filePath && (
+        <div style={{ marginTop: "8px" }}>
+        {task.fileName}
+
+        {/* --<strong>{task.fileName}</strong> */}
+        <br />
+        <a
+            href={`http://localhost:5001/${task.filePath}`}
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            View File
+        </a>
+        </div>
+    )}
+
     </div>
-    </li>
+
+    <div className="task-actions">
+    <button onClick={() => onToggle(task)}>
+        {task.completed ? "Undo" : "Mark"}
+    </button>
+
+    <button onClick={() => setIsEditing(true)}>
+        Edit
+    </button>
+
+    <button onClick={() => onDelete(task._id)}>
+        Delete
+    </button>
+    </div>
+</li>
 );
 }
